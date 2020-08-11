@@ -1,6 +1,8 @@
 package Automata
 
-class NonDeterministicAutomaton(estados: Array[String], sigma: Array[String], q_i: String, q_f: Array[String], transicion: Array[Array[String]]) {
+import Visualization.JungTest
+
+class NonDeterministicAutomaton(estados: Array[String], sigma: Array[String], q_i: String, q_f: Array[String], transicion: Array[Array[String]]) extends Automaton {
   private var automaton = collection.mutable.Map[(String, String), Array[String]]()
 
   for (q <- estados; s <- sigma)
@@ -13,7 +15,7 @@ class NonDeterministicAutomaton(estados: Array[String], sigma: Array[String], q_
     automaton((t(0), t(1))) = automaton((t(0), t(1))).appended(t(2))
 
 
-  private def leerCadena(cadena: String, estadoIn: String, estadoFin: Array[String]): Boolean = {
+  private def recursiveRead(cadena: String, estadoIn: String, estadoFin: Array[String]): Boolean = {
     var pertenece = false
     var estadoAct = estadoIn
     if(!cadena.equals("") && !pertenece) {
@@ -23,14 +25,14 @@ class NonDeterministicAutomaton(estados: Array[String], sigma: Array[String], q_
         if (!state.equals("") && !pertenece) {
           var newText = cadena.substring(1)
           println(newText + " --- " + estadoAct + " --- " + s + " --- " + state)
-          pertenece = leerCadena(newText, state, estadoFin)
+          pertenece = recursiveRead(newText, state, estadoFin)
         }
       }
       if(!pertenece) {
         for (state2 <- automaton((estadoAct, ""))) {
           if (!state2.equals("") && !pertenece) {
             println(cadena + " --- " + estadoAct + " --- " + s + " --- " + state2)
-            pertenece = leerCadena(cadena, state2, estadoFin)
+            pertenece = recursiveRead(cadena, state2, estadoFin)
           }
         }
       }
@@ -43,7 +45,7 @@ class NonDeterministicAutomaton(estados: Array[String], sigma: Array[String], q_
       if(!pertenece) {
         for (state2 <- automaton((estadoAct, ""))) {
           if (!state2.equals("") && !pertenece) {
-            pertenece = leerCadena(cadena, state2, estadoFin)
+            pertenece = recursiveRead(cadena, state2, estadoFin)
           }
         }
       }
@@ -57,7 +59,18 @@ class NonDeterministicAutomaton(estados: Array[String], sigma: Array[String], q_
   }
 
   def leer(cadena: String): Boolean = {
-    leerCadena(cadena, q_i, q_f)
+    recursiveRead(cadena, q_i, q_f)
   }
 
+  def show(): Unit = {
+
+    var i = 0
+    var newTransition = Array[String]()
+    while (i < transicion.length) {
+      newTransition = newTransition.appended(transicion(i)(1) + "-" + transicion(i)(0) + "-" + transicion(i)(2))
+      i = i + 1
+    }
+
+    JungTest.show(estados,newTransition,q_i,q_f, this)
+  }
 }

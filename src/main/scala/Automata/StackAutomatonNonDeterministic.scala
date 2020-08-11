@@ -1,8 +1,9 @@
 package Automata
 
 import scala.collection.mutable.Stack
+import Visualization.JungTest
 
-class StackAutomatonNonDeterministic(estados: Array[String], sigma: Array[String], sigmaStack: Array[String], q_i: String, q_f: Array[String]) {
+class StackAutomatonNonDeterministic(estados: Array[String], sigma: Array[String], sigmaStack: Array[String], q_i: String, q_f: Array[String]) extends Automaton {
 
   private val PUSH = "0"
   private val POP = "1"
@@ -16,7 +17,7 @@ class StackAutomatonNonDeterministic(estados: Array[String], sigma: Array[String
   private var realStackOperation = collection.mutable.Map[String, Array[String]]()
   private var automaton = collection.mutable.Map[(String, String), Array[String]]()
 
-  private var myStack = Stack[String]()
+  //private var myStack = Stack[String]()
 
   for (q <- estados; s <- sigma)
     automaton += ((q, s) -> Array[String](""))
@@ -28,7 +29,7 @@ class StackAutomatonNonDeterministic(estados: Array[String], sigma: Array[String
   private var word = ""
   private var finalState = ""
 
-  def recursiveRead(cadena: String, recursiveStack: Stack[String], q_i: String): Boolean = {
+  private def recursiveRead(cadena: String, recursiveStack: Stack[String], q_i: String): Boolean = {
     var pertenece = false
     if(!cadena.equals("")) {
       var s = cadena.split("")(0)
@@ -76,7 +77,7 @@ class StackAutomatonNonDeterministic(estados: Array[String], sigma: Array[String
           }
         }
       }
-      
+
       if(!pertenece) {
         for(state <- automaton((q_i, s))) {
           if (!state.equals("") && !pertenece) {
@@ -180,11 +181,12 @@ class StackAutomatonNonDeterministic(estados: Array[String], sigma: Array[String
     pertenece
   }
 
-  def read(cadena: String): Boolean = {
+  def leer(cadena: String): Boolean = {
     var pertenece  = false
     if(sourceState != "")
       throw new Exception("Check delta definition")
     else {
+      var myStack = Stack[String]()
       pertenece = recursiveRead(cadena, myStack, q_i)
     }
     pertenece
@@ -423,5 +425,70 @@ class StackAutomatonNonDeterministic(estados: Array[String], sigma: Array[String
   }
   private def myIgnore(): Boolean = {
     true
+  }
+
+  def show(): Unit = {
+
+    var newTransition = Array[String]()
+
+    for (q <- estados; s <- sigma; q_f <- automaton(q,s)) {
+      if (!q_f.equals("")) {
+        for (so <- stackOperation(q,q_f,s)) {
+          var oper = realStackOperation(so)
+          var trans = s
+          if(oper(0).equals(POP)) {
+            trans = trans + ".pop(" + oper(1) + ")"
+          }
+          else if(oper(0).equals(PUSH)) {
+            trans = trans + ".push(" + oper(1) + ")"
+          }
+          else if(oper(0).equals(SKIP)) {
+            trans = trans + ".skip(" + oper(1) + ")"
+          }
+          else if(oper(0).equals(CHANGE_TOP)) {
+            trans = trans + ".changeTop(" + oper(1) + "," + oper(2) + ")"
+          }
+          else if(oper(0).equals(PUSH_ON)) {
+            trans = trans + ".puhsOn(" + oper(1) + "," + oper(2) + ")"
+          }
+          else if(oper(0).equals(IGNORE)) {
+            trans = trans + ".ignore()"
+          }
+          trans = trans + "-" + q + "-" + q_f
+          newTransition = newTransition.appended(trans)
+        }
+      }
+    }
+
+    for (q <- estados; q_f <- automaton(q,"")) {
+      if (!q_f.equals("")) {
+        for (so <- stackOperation(q,q_f,"")) {
+          var oper = realStackOperation(so)
+          var trans = "#"
+          if(oper(0).equals(POP)) {
+            trans = trans + ".pop(" + oper(1) + ")"
+          }
+          else if(oper(0).equals(PUSH)) {
+            trans = trans + ".push(" + oper(1) + ")"
+          }
+          else if(oper(0).equals(SKIP)) {
+            trans = trans + ".skip(" + oper(1) + ")"
+          }
+          else if(oper(0).equals(CHANGE_TOP)) {
+            trans = trans + ".changeTop(" + oper(1) + "," + oper(2) + ")"
+          }
+          else if(oper(0).equals(PUSH_ON)) {
+            trans = trans + ".puhsOn(" + oper(1) + "," + oper(2) + ")"
+          }
+          else if(oper(0).equals(IGNORE)) {
+            trans = trans + ".ignore()"
+          }
+          trans = trans + "-" + q + "-" + q_f
+          newTransition = newTransition.appended(trans)
+        }
+      }
+    }
+
+    JungTest.show(estados,newTransition,q_i,this.q_f, this)
   }
 }

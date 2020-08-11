@@ -4,52 +4,54 @@ object mainTest {
 
   def main(args: Array[String]): Unit = {
     //--------------------------------------Deterministic----------------------------------------------------
-    /*    
+    /*
     val estados = Array("A","B","C","D","E");
     val sigma = Array("a","b");
     val q_i = "A";
     val q_f = "D";
-    
+
+    val transicion = Array(
+      Array("A","a","B"),//aAB
+      Array("B","b","C"),//bBC
+      Array("C","b","D"),//bCD
+      Array("D","a","B"),//aDB
+      Array("C","a","E"),//aCE
+      Array("E","a","B")//aEB
+    );
+
+    var M = new DeterministicAutomaton(estados,sigma,q_i,q_f,transicion)
+    M.show()
+    //println(M.leer("abbabaabbabaabb"))
+    */
+
+    /*
+    val estados = Array("A","B","C","D","E")
+    val sigma = Array("a","b")
+    val q_i = "A"
+    val q_f = "D"
     val transicion = Array(
       Array("A","a","B"),
       Array("B","b","C"),
       Array("C","b","D"),
       Array("D","a","B"),
       Array("C","a","E"),
-      Array("E","a","B")
-    );
+      Array("E","a","B"))
     
-    println(leerCadena(automaton(estados, sigma, q_i, q_f, transicion), cadena, q_i, q_f))
-    
-    */
-    /*
-    val estados = states("A","B","C","D","E")
-    val sigma = alphabet("a","b")
-    val q_i = "A"
-    val q_f = "D"
-    val transicion = transitions(
-      d("A","a","B"),
-      d("B","b","C"),
-      d("C","b","D"),
-      d("D","a","B"),
-      d("C","a","E"),
-      d("E","a","B"))
-    
-    //Defina un aut´omata de estados finitos que acepte el lenguaje a(bba|baa)∗bb
+    //Defina un autómata de estados finitos que acepte el lenguaje a(bba|baa)∗bb
     val cadena = "abbabaabaabaabaabb"
     
     var det = new DeterministicAutomaton(estados, sigma, q_i, q_f, transicion)
-    
-    println(det.leerCadena(cadena))
+    det.show()
+    println(det.leer(cadena))
     */
     //-------------------------------------------------------------------------------------------------------
 
 
     //------------------------------------------Stack--------------------------------------------------------
     /*
-    val state = states("A")
-    val sigma = alphabet("a","b")
-    val r = alphabet("a","b")
+    val state = Array("A")
+    val sigma = Array("a","b")
+    val r = Array("a","b")
     val q_i = "A"
     val q_f = Array("A")
     
@@ -57,15 +59,15 @@ object mainTest {
     
     stackAut.delta("A","A","a").push("a")
     stackAut.delta("A","A","b").pop("a")
-    
-    println(s"Funcionaaaaa ${stackAut.read("abaaaabbbabb")}")
+    stackAut.show()
+    //println(s"Funcionaaaaa ${stackAut.leer("abaaaabbbabb")}")
     println("Prueba Stack")
     */
-     
-    /*
-    val state = states("A","B")
-    val sigma = alphabet("a","b")
-    val r = alphabet("a","b")
+
+    
+    val state = Array("A","B")
+    val sigma = Array("a","b")
+    val r = Array("a","b")
     val q_i = "A"
     val q_f = Array("B")
 
@@ -76,15 +78,15 @@ object mainTest {
     stackAut.delta("A","B","").ignore()
     stackAut.delta("B","B","a").pop("a")
     stackAut.delta("B","B","b").pop("b")
-    
-    println(s"Funcionaaaaa ${stackAut.read("aabbaa")}")
+    stackAut.show()
+    println(s"Funcionaaaaa ${stackAut.leer("aabbaa")}")
     println("Prueba Stack")
-    */
+    
 
     /*
-    val state = states("I","F","A","B")
-    val sigma = alphabet("0","1","2","3","4","5","6","7","8","9","+","*","[","]","(",")","{","}")
-    val r = alphabet("#","$","%")
+    val state = Array("I","F","A","B")
+    val sigma = Array("0","1","2","3","4","5","6","7","8","9","+","*","[","]","(",")","{","}")
+    val r = Array("#","$","%")
     val q_i = "I"
     val q_f = Array("F")
 
@@ -152,18 +154,17 @@ object mainTest {
     M.delta("B","A","9").ignore()
     
     M.delta("A","F","").ignore()
-    
-    println(s"Funcionaaaaa ${M.read("{3+2+(3)}")}")
+    M.show()
+    println(s"Funcionaaaaa ${M.leer("{3+2+(3)}")}")
     println("Prueba Stack")
     */
 
-    
-    val state = states("A","F","2","3","5","B","C","D","E","G","H","I","J","K","L")
-    val sigma = alphabet("a","q","r","2","3","5")
-    val r = alphabet("a")
+    /*
+    val state = Array("A","F","2","3","5","B","C","D","E","G","H","I","J","K","L")
+    val sigma = Array("a","q","r","2","3","5")
+    val r = Array("a")
     val q_i = "A"
     val q_f = Array("F")
-
     var M = new StackAutomatonNonDeterministic(state,sigma, r, q_i, q_f)
 
     M.delta("A","A","a").push("a")
@@ -192,27 +193,27 @@ object mainTest {
     M.delta("5","F","").ignore()
 
     M.delta("F","F","r").pop("a")
-
-    println(s"Funcionaaaaa ${M.read("aaaaaaaaaaaaaaaaaa5qqqrrr")}")
+    M.show()
+    //println(s"Funcionaaaaa ${M.leer("aaaaaaaaaaaaaaaaaa5qqqrrr")}")
     println("Prueba Stack")
-    
+    */
     //-------------------------------------------------------------------------------------------------------
 
 
     //-----------------------------------------Response------------------------------------------------------
     /*
-    val estados = states("A","B","C","D","E")
-    val sigma = alphabet("a","b")
-    val sigmaSalida = alphabet("0","1","2","3","4","5")
+    val estados = Array("A","B","C","D","E")
+    val sigma = Array("a","b")
+    val sigmaSalida = Array("0","1","2","3","4","5")
     val q_i = "A"
     val q_f = "D"
-    val transicion = transitions(
-      d("A","a","B"),
-      d("B","b","C"),
-      d("C","b","D"),
-      d("D","a","B"),
-      d("C","a","E"),
-      d("E","a","B")
+    val transicion = Array(
+      Array("A","a","B"),
+      Array("B","b","C"),
+      Array("C","b","D"),
+      Array("D","a","B"),
+      Array("C","a","E"),
+      Array("E","a","B")
     )
     
     def g(q: String): String = q match {
@@ -256,7 +257,7 @@ object mainTest {
     def g_i(q: String): String = null
     def h_i(q: String, s: String): String = null
     
-    val response = new ResponseAutomaton(estados, sigma, sigmaSalida, q_i, q_f, transicion, h, g_i)
+    val response = new ResponseAutomaton(estados, sigma, sigmaSalida, q_i, q_f, transicion, h_i, g)
         
     if(response.automatonType)
       println("Moore Response Automaton Test")
@@ -264,7 +265,8 @@ object mainTest {
       println("Mealy Response Automaton Test")
     
     val cadena = "abbabaabaabaabaabb";
-    println(response.leerCadena(cadena))
+    response.show()
+    //println(response.leer(cadena))
     */
     //-------------------------------------------------------------------------------------------------------
 
@@ -272,25 +274,30 @@ object mainTest {
     //-------------------------------------Non Deterministic-------------------------------------------------
 
     /*
-    val estados = states("A","B","C","D","E","F","G","H","I","J","K","L")
-    val sigma = alphabet("0","1")
+    val estados = Array("A","B","C","D","E","F","G","H","I","J","K","L")
+    val sigma = Array("0","1")
     val q_i = "A"
     val q_f = Array("I")
-    val transicion = transitions(
-      d("A","0","A"), d("A","1","B"),
-      d("A","0","E"),d("B","0","C"),
-      d("B","1","D"),d("B","0","B"),
-      d("E","0","E"),d("E","1","F"),
-      d("E","0","G"),d("C","1","K"),
-      d("D","0","D"),d("D","0","H"),
-      d("F","0","L"),d("F","0","F"),
-      d("G","1","J"),d("H","0","I"),
-      d("K","0","I"),d("K","0","K"),
-      d("L","1","I"),d("J","1","I"),
-      d("J","0","J")
+    val transicion = Array(
+      Array("A","0","A"), Array("A","1","B"),
+      Array("A","0","E"),Array("B","0","C"),
+      Array("B","1","D"),Array("B","0","B"),
+      Array("E","0","E"),Array("E","1","F"),
+      Array("E","0","G"),Array("C","1","K"),
+      Array("D","0","D"),Array("D","0","H"),
+      Array("F","0","L"),Array("F","0","F"),
+      Array("G","1","J"),Array("H","0","I"),
+      Array("K","0","I"),Array("K","0","K"),
+      Array("L","1","I"),Array("J","1","I"),
+      Array("J","0","J")
     )
 
     val cadena = "0000110"
+    var nonDet = new NonDeterministicAutomaton(estados, sigma, q_i, q_f, transicion)
+
+    println("Non Deterministic Automaton Test")
+    nonDet.show()
+    println(nonDet.leer(cadena))
     */
     /*
     val estados = states("A","B")
@@ -332,63 +339,30 @@ object mainTest {
     println(nonDet.leer(cadena))
     */
     /*
-    val estados = states("A","B","C")
-    val sigma = alphabet("a","b","c","d")
+    val estados = Array("A","B","C")
+    val sigma = Array("a","b","c","d")
     val q_i = "C"
     val q_f = Array("B")
-    val transicion = transitions(
-      d("C","c","A"),
-      d("A","","B"),
-      d("A","a","A"),
-      d("A","d","A"),
-      d("A","b","A"),
-      d("B","a","B"),
-      d("B","b","B"),
+    val transicion = Array(
+      Array("C","c","A"),
+      Array("A","","B"),
+      Array("A","a","A"),
+      Array("A","d","A"),
+      Array("A","b","A"),
+      Array("B","a","B"),
+      Array("B","b","B"),
     )
 
     val cadena = "cabababdabababab"
     //(1*(01*01*)*)U(0*(10*10*)*)
     var nonDet = new NonDeterministicAutomaton(estados, sigma, q_i, q_f, transicion)
-
+    nonDet.show()
     println("Non Deterministic Automaton Test")
-    println(nonDet.leer(cadena))
+    //println(nonDet.leer(cadena))
     */
     //-------------------------------------------------------------------------------------------------------
   }
 
 
 
-
-
-
-
-
-  def states(states: String*): Array[String] = {
-    var estado: Array[String] = Array()
-    for(s <- states) {
-      estado = estado.appended(s)
-    }
-    estado
-  }
-
-  def alphabet(sigma: String*): Array[String] = {
-    var alfabeto: Array[String] = Array()
-    for(s <- sigma) {
-      alfabeto = alfabeto.appended(s)
-    }
-    alfabeto
-  }
-
-  def transitions(transitionValues: Array[String]*): Array[Array[String]] = {
-    var transicion: Array[Array[String]] = Array()
-
-    for(s <- transitionValues) {
-      transicion = transicion.appended(s)
-    }
-    transicion
-  }
-
-  def d(sourceState: String, str: String, finalState: String): Array[String] = {
-    Array(sourceState, str, finalState)
-  }
 }
